@@ -45,11 +45,12 @@
 
 
 </head>
-
-<body onload="loader()">
+{{-- <body onload="loader()">
     <div class="loader">
         <span class="loader-spinner">Loading...</span>
-    </div>
+    </div> --}}
+
+<body>
 
     @include('frontend.inc.header')
 

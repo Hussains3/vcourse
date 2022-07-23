@@ -71,10 +71,10 @@
                                 <h6>Subtotal</h6>
                                 <p>&#2547;{{Cart::subtotal()}}</p>
                             </div>
-                            <div class="summery-wizard-text">
+                            {{-- <div class="summery-wizard-text">
                                 <h6>Coupon Discount</h6>
                                 <p>70%</p>
-                            </div>
+                            </div> --}}
                             <div class="summery-wizard-text d-none">
                                 <h6>taxes</h6>
                                 <p>{{Cart::tax()}}</p>
