@@ -32,6 +32,8 @@ class Course extends Model
         'what_will_learn'
     ];
 
+    protected $with = ['user'];
+
 
     public function category()
     {
