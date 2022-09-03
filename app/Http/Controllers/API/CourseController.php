@@ -13,7 +13,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::with('category')->where('status','approved')->latest()->paginate(12);
+        $courses = Course::with('category')->where('status','approved')->get();
         return response()->json(['status ' => 200, 'message' => 'Course found', 'data' => $courses  ]);
     }
 
@@ -53,8 +53,6 @@ class CourseController extends Controller
         }
 
         $course = Course::with('user','category','lessons','nextBatch','enrollItems')->find($course->id);
-
-
         return response()->json(['status ' => 200, 'message' => 'Course found', 'data' => $course  ]);
 
     }
