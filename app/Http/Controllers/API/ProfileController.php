@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Course;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use League\CommonMark\Node\Query\AndExpr;
 use Illuminate\Support\Facades\Auth;
+use League\CommonMark\Node\Query\AndExpr;
+
 class ProfileController extends Controller
 {
     /**
@@ -18,13 +19,14 @@ class ProfileController extends Controller
     public function myprofile(User $user)
     {
 
-        $user = User::where('id',$user->id)->with('instructedCourses')->first();
+        $user = User::where('id', $user->id)->with('instructedCourses')->first();
 
 
 
         if ($user->id == Auth::id()) {
             # code...
-            $enrolledCourses = DB::select('SELECT
+            $enrolledCourses = DB::select(
+                'SELECT
                 courses.id
             FROM
                 courses
@@ -33,11 +35,11 @@ class ProfileController extends Controller
                     ON
                     enrollment_items.course_id = courses.id
                     WHERE
-                    enrollment_items.student_id = '.$user->id
-        );
+                    enrollment_items.student_id = ' . $user->id
+            );
 
 
-        $runningCourses = DB::select("SELECT
+            $runningCourses = DB::select("SELECT
             enrollment_items.student_id,
             enrollment_items.batch_id,
             batches.course_id,
@@ -68,7 +70,7 @@ class ProfileController extends Controller
 
 
 
-        $completedCourses = DB::select("SELECT
+            $completedCourses = DB::select("SELECT
             enrollment_items.student_id,
             enrollment_items.batch_id,
             batches.course_id,
@@ -99,15 +101,17 @@ class ProfileController extends Controller
 
 
 
-        $courses = Course::where('status','approved')->with('user','lessons','batches')->get();
-        return view('frontend.my_profile', compact('user', 'courses','enrolledCourses','runningCourses','completedCourses'));
+            $courses = Course::where('status', 'approved')->with('user', 'lessons', 'batches')->get();
+
+            return response()->json(['status' => 200, $user, $courses, $enrolledCourses, $runningCourses, $completedCourses]);
+            // return view('frontend.my_profile', compact('user', 'courses','enrolledCourses','runningCourses','completedCourses'));
 
 
-        }else{
-            return redirect()->back();
+        } else {
+            // return redirect()->back();
+
+            return response()->json(['status' => 403, 'message' => 'You can ton see others profile']);
         }
-
-
     }
 
 
@@ -115,10 +119,10 @@ class ProfileController extends Controller
     public function instructor(User $user)
     {
         $user = $user;
-        $courses = Course::where('user_id',$user->id)->with('user','lessons')->where('status','approved')->get();
+        $courses = Course::where('user_id', $user->id)->with('user', 'lessons')->where('status', 'approved')->get();
 
-        return view('frontend.instructor-profile', compact('user', 'courses'));
-
+        // return view('frontend.instructor-profile', compact('user', 'courses'));
+        return response()->json(['status' => 200, $user, $courses]);
     }
 
     /**

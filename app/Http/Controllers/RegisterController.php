@@ -113,8 +113,12 @@ class RegisterController extends Controller
         }
         $user->about_me = $request->about_me;
         $user->save();
+
+
         $role = Role::where('name','student')->get()->first();
         $user->assignRole([$role->id]);
+
+
         auth()->login($user);
 
         if ($request->experties) {
@@ -141,6 +145,8 @@ class RegisterController extends Controller
                 $message->to($request->email, 'Admin')->subject('Welcome to Vcourse');
             });
         }
+
+
         return redirect()
         ->route('profile.myprofile',Auth::user()->id)
         ->with('success', "Welcome to Vcourse.");
@@ -157,7 +163,7 @@ class RegisterController extends Controller
                     : back()->withErrors(['email' => __($status)]);
     }
 
-
+    // Updating password
     public function update(Request $request)
     {
         $request->validate([
@@ -165,8 +171,6 @@ class RegisterController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
-
-
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),

@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
-    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 
     /**
