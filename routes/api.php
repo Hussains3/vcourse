@@ -22,8 +22,7 @@ Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 
-Route::get('courses', [CourseController::class, 'index']);
-Route::get('/{course}/show', [CourseController::class, 'show']);
+
 
 
 Route::apiResource('posts', CourseController::class)->middleware('auth:sanctum');
@@ -36,11 +35,10 @@ Route::apiResource('posts', CourseController::class)->middleware('auth:sanctum')
 // https://vcourse.net/api/checkout
 
 // -------------------------
-Route::group(['namespace' => 'App\Http\Controllers\API'], function()
-{
+Route::group(['namespace' => 'App\Http\Controllers\API'], function () {
 
     // laravel email verification
-    Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/email/verify', 'HomeController@verify')->name('verification.notice');
     });
 
@@ -73,7 +71,7 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
 
 
-    Route::group(['prefix' => 'subscriptions'], function() {
+    Route::group(['prefix' => 'subscriptions'], function () {
         Route::get('/', 'SubscriptionController@index')->name('subscriptions.index');
         Route::post('/store', 'SubscriptionController@store')->name('subscriptions.store');
         Route::get('/edit/{subscription}', 'SubscriptionController@edit')->name('subscriptions.edit');
@@ -83,28 +81,30 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
     // Route::resource('contacts', ContactController::class);
 
-    Route::group(['prefix' => 'contacts'], function() {
+    Route::group(['prefix' => 'contacts'], function () {
         Route::post('/store', 'ContactController@store')->name('contacts.store');
     });
 
     // Login or signup with facebook and google
-    Route::get('auth/google','SocialController@googleRedirect')->name('auth.googleRedirect');
-    Route::get('auth/google/callback','SocialController@loginWithGoogle')->name('auth.loginWithGoogle');
+    Route::get('auth/google', 'SocialController@googleRedirect')->name('auth.googleRedirect');
+    Route::get('auth/google/callback', 'SocialController@loginWithGoogle')->name('auth.loginWithGoogle');
 
     //Login with facebook
-    Route::get('auth/facebook','SocialController@facebookRedirect')->name('auth.facebookRedirect');
-    Route::get('auth/facebook/callback','SocialController@loginWithFacebook')->name('auth.loginWithFacebook');
+    Route::get('auth/facebook', 'SocialController@facebookRedirect')->name('auth.facebookRedirect');
+    Route::get('auth/facebook/callback', 'SocialController@loginWithFacebook')->name('auth.loginWithFacebook');
 
 
-    Route::group(['prefix' => 'courses'], function() {
+    Route::group(['prefix' => 'courses'], function () {
         Route::get('/', 'CourseController@index')->name('courses.index');
         Route::get('/{course}/show', 'CourseController@show')->name('courses.show');
         Route::post('/search', 'CourseController@search')->name('courses.search');
     });
 
-    Route::group(['middleware' => ['guest']], function() {
+    Route::group(['middleware' => ['guest']], function () {
 
-        Route::get('/forgot-password', function () {return view('frontend.forget-password');})->name('password.request');
+        Route::get('/forgot-password', function () {
+            return view('frontend.forget-password');
+        })->name('password.request');
         Route::post('/forgot-password', 'RegisterController@passemail')->name('password.passemail');
         Route::get('/reset-password/{token}', function ($token) {
             return view('auth.reset-password', ['token' => $token]);
@@ -126,19 +126,19 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
         Route::get('/login', 'LoginController@show')->name('login.show');
         Route::post('/login', 'LoginController@login')->name('login.perform');
         // Login or signup with facebook and google
-        Route::get('auth/google','SocialController@googleRedirect')->name('auth.googleRedirect');
-        Route::get('auth/google/callback','SocialController@loginWithGoogle')->name('auth.loginWithGoogle');
+        Route::get('auth/google', 'SocialController@googleRedirect')->name('auth.googleRedirect');
+        Route::get('auth/google/callback', 'SocialController@loginWithGoogle')->name('auth.loginWithGoogle');
 
         //Login with facebook
-        Route::get('auth/facebook','SocialController@facebookRedirect')->name('auth.facebookRedirect');
-        Route::get('auth/facebook/callback','SocialController@loginWithFacebook')->name('auth.loginWithFacebook');
+        Route::get('auth/facebook', 'SocialController@facebookRedirect')->name('auth.facebookRedirect');
+        Route::get('auth/facebook/callback', 'SocialController@loginWithFacebook')->name('auth.loginWithFacebook');
     });
 
     //Only for authenticate user
-    Route::group(['middleware' => ['auth:sanctum', 'permission']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission']], function () {
 
 
-        Route::group(['prefix' => 'applications'], function() {
+        Route::group(['prefix' => 'applications'], function () {
             Route::get('/', 'ApplicationController@index')->name('applications.index');
             Route::post('/cv/{application}', 'ApplicationController@cv')->name('applications.cv');
             Route::get('/update/{application}', 'ApplicationController@update')->name('applications.update');
@@ -151,12 +151,12 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
 
         Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
-        Route::get('/{user}/profile', 'ProfileController@myprofile') ->name('profile.myprofile');
+        Route::get('/{user}/profile', 'ProfileController@myprofile')->name('profile.myprofile');
         Route::get('dashboard', 'HomeController@dashboard')->name('home.dashboard');
         Route::get('frontend', 'HomeController@frontend')->name('home.frontend');
 
 
-        Route::group(['prefix' => 'users'], function() {
+        Route::group(['prefix' => 'users'], function () {
             Route::get('/', 'UserController@index')->name('users.index');
             Route::get('/create', 'UserController@create')->name('users.create');
             Route::post('/create', 'UserController@store')->name('users.store');
@@ -168,7 +168,7 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
 
         // enrollment routs
-        Route::group(['prefix' => 'enrollments'], function() {
+        Route::group(['prefix' => 'enrollments'], function () {
             Route::get('/verification', 'EnrollmentController@verification')->name('enrollments.verification');
             Route::get('/enroll', 'EnrollmentController@enroll')->name('enrollments.enroll');
             Route::post('/store', 'EnrollmentController@store')->name('enrollments.store');
@@ -176,7 +176,7 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
 
 
-        Route::group(['prefix' => 'courses'], function() {
+        Route::group(['prefix' => 'courses'], function () {
             Route::get('/create', 'CourseController@create')->name('courses.create');
             Route::post('/create', 'CourseController@store')->name('courses.store');
             Route::get('/pending', 'CourseController@pending')->name('courses.pending');
@@ -191,7 +191,7 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
 
 
         //Cart rout
-        Route::group(['prefix' => 'carts'], function (){
+        Route::group(['prefix' => 'carts'], function () {
             Route::get('/', 'CartController@index')->name('cart.index');
             Route::post('/addtocart/{course}', 'CartController@store')->name('cart.store');
             Route::post('{row}/remove', 'CartController@remove')->name('cart.remove');
@@ -204,7 +204,6 @@ Route::group(['namespace' => 'App\Http\Controllers\API'], function()
         Route::resource('permissions', PermissionController::class);
         Route::resource('lessons', LessonController::class);
         Route::resource('categories', CategoryController::class);
-
     });
 
     Route::resource('reviews', ReviewController::class);
